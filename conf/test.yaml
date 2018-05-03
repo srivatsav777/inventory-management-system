@@ -1,0 +1,59 @@
+proxies:
+  rsds1:
+   httpd:
+     listen-address  : rsds1.admin
+     listen-port     : 8888
+   metrics:
+     periodicity     : 3000
+   limits:
+     threads         : 2
+   paths:
+     cache-dir       : 
+   clusters:
+     blue Cluster:
+       listen-address : rsds1.blue
+       listen-port    : 9042
+       hash8-range    : [ 0, 120 ]
+       cassandra-hosts: [ cass1.blue, cass2.blue, cass3.blue  ]
+       cassandra-port : 9042
+     gray Cluster:
+       listen-address : rsds1.gray
+       listen-port    : 9042
+       hash8-range    : [ 0, 120 ]
+       cassandra-hosts: [ cass1.gray, cass2.gray, cass3.gray  ]
+       cassandra-port : 9042
+     pink Cluster:
+       listen-address : rsds1.pink
+       listen-port    : 9042
+       hash8-range    : [ 0, 120 ]
+       cassandra-hosts: [ cass1.pink, cass2.pink, cass3.pink  ]
+       cassandra-port : 9042
+  rsds2:
+   httpd:
+     listen-address  : rsds2.admin
+     listen-port     : 8888
+   metrics:
+     periodicity     : 3000
+   limits:
+     threads         : 2
+   paths:
+     cache-dir       : ./cache
+   clusters:
+     blue Cluster:
+       listen-address : rsds2.blue
+       listen-port    : 9042
+       hash8-range    : [ 121, 240 ]
+       cassandra-hosts: [ cass2.blue, cass3.blue, cass1.blue  ]
+       cassandra-port : 9042
+     gray Cluster:
+       listen-address : rsds2.gray
+       listen-port    : 9042
+       hash8-range    : [ 121, 240 ]
+       cassandra-hosts: [ cass2.gray, cass3.gray, cass1.gray  ]
+       cassandra-port : 9043
+     pink Cluster:
+       listen-address : rsds2.pink
+       listen-port    : 9042
+       hash8-range    : [ 121, 240 ]
+       cassandra-hosts: [ cass2.pink, cass3.pink, cass1.pink  ]
+       cassandra-port : 9044

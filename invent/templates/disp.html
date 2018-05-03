@@ -1,0 +1,71 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+<center><h1>Orders</h1></center>
+
+    {% csrf_token %}
+
+<center>
+<table border="1" id="mytable">
+<th>Process id </th>
+<th>Customer_id</th>
+<th>Product</th>
+<th>Customer_name</th>
+<th>Quantity </th>
+{% block content %}
+{% for p,s in dic1%}
+<tr>
+<td id={{ forloop.counter }}>
+{{ s }}
+</td>
+{% for q,r in p.items %}
+<td> {{ r.value }} </td>
+{% endfor %}
+<td><input type="button" value="Approve" onclick="myf({{ forloop.counter }})">  </td>
+</tr>
+{% endfor %}
+{% endblock %}
+</table>
+
+<script>
+
+function myf(x)
+{
+var id=document.getElementById(x).innerText;
+
+var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(data) {
+ //if (this.readyState == 2) {
+   //   document.getElementById("demo").innerHTML = "Request recieved";
+  //  }
+//if (this.readyState == 1) {
+     // document.getElementById("demo").innerHTML = "server connection";
+   // } 
+   if (this.readyState == 4 && this.status == 200) {
+
+       alert(this.responseText);   
+       location.reload()
+       //document.getElementById(x).style.display="none";
+    }
+};
+var y=document.getElementsByName("csrfmiddlewaretoken")[0].value;
+xhttp.open("POST", "http://localhost:8000/approve/", true);
+//xhttp.createCORSRequest("POST", "http://localhost:8080/engine-rest/task/"+id+"/complete");
+//xhttp.setRequestHeader("Access-Control-Allow-Origin", "http://localhost:8000");
+xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//xhttp.setRequestHeader("Access-Control-Allow-Methods","POST");
+//xhttp.setRequestHeader("Access-Control-Allow-Headers","content-type");
+
+xhttp.send("csrfmiddlewaretoken="+y+"&id="+id);
+
+}
+
+</script>
+
+</body>
+</html>

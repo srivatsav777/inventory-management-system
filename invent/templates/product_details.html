@@ -1,0 +1,116 @@
+<html>
+<head>
+
+<style>
+input[type=text], select,[type=number] {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=button],[type=submit] {
+    width: 50%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+label{
+display: block;
+text-align:left;
+font-size: 25px;
+margin-left: 50px;
+color:white;
+}
+
+input[type=button]:hover {
+    background-color: #45a049;
+}
+
+div {
+    width: 50%;
+    border-radius: 5px;
+    
+    padding: 20px;
+}
+body
+{
+background-color: #e0e0d1;
+background:url(http://media1.decore.com/Cms_Data/Contents/Decore/Media/Materials/WengeHG_Deco-form_wL.jpg);
+}
+h2
+{
+ color:white;
+}
+h1
+{
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<script>
+//{% csrf_token %}
+function loadDoc() {
+var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+ //if (this.readyState == 2) {
+   //   document.getElementById("demo").innerHTML = "Request recieved";
+  //  }
+//if (this.readyState == 1) {
+     // document.getElementById("demo").innerHTML = "server connection";
+   // } 
+   if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("demo").innerHTML = this.responseText;
+    }
+    
+  };
+  //var csrftoken = Cookies.get('csrftoken');
+  //rct = request.POST.get('csrfmiddlewaretoken', '')
+  var x=document.getElementsByName("csrfmiddlewaretoken")[0].value;
+  xhttp.open("POST", "http://localhost:8000/product_details/", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("csrfmiddlewaretoken="+x+"&pname="+document.getElementById("id_pname").value+"&pnum="+document.getElementById("id_pnum").value+"&plabel="+document.getElementById("id_plabel").value);
+  //xhttp.send("name=vatsav&percentage=90");
+}
+
+
+</script>
+
+<center>
+
+<div>
+<center> <h1> ENTER THE PRODUCT DETAILS</h1> </center>
+
+
+<form>
+    
+
+    {% csrf_token %}
+    {{ form.as_p}}
+    <input type="button" value="submit" onclick="loadDoc()" /> 
+
+</form>
+</div>
+
+<h2 id="demo"> </h2>
+
+</center>
+
+
+
+</body>
+
+</html>

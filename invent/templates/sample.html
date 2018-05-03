@@ -1,0 +1,258 @@
+<html>
+
+
+<head>
+
+<style>
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+
+input:focus{
+    outline: none;
+}
+input{
+border:0;
+}
+td,tr,th
+{
+border:1px solid grey;
+}
+th
+{
+background-color:lightgrey;
+border:1px solid grey;
+}
+.tabcontent
+{
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+</style>
+
+</head>
+
+
+<body onload="finaler()">
+
+{% csrf_token %}
+
+<div class="tab">
+  <button class="tablinks" class=" active" onclick="display(event,'0')">Current Inventory</button>
+  <button class="tablinks" onclick="display(event,'1')">Incoming Purchases</button>
+  <button class="tablinks" onclick="display(event,'2')">Orders TO Ship</button>
+  <button class="tablinks" onclick="">Reports</button>
+</div>
+
+
+<table class="tabcontent" style="display:block;">
+
+<th> id </th>
+<th> ProductName </th>
+<th> PartNumber </th>
+<th> ProductLabel </th>
+<th> StartingInventory </th>
+<th> InventoryRecieved </th>
+<th> InventoryShipped </th>
+<th> InventoryOnHand </th>
+<th> MinimumRequired </th>
+
+{% block content %}
+
+{% for p in data1 %}
+<tr  id={{ forloop.counter }}  class="temp" >
+{% for x in p %}
+<td id={{ forloop.counter }}> <input type="text" size="15"  value='{{ x }}' onfocus="myf1((this.parentElement).parentElement.id,this.parentElement.id)" onfocusout="myf((this.parentElement).parentElement.id,this.parentElement.id)" > </td>
+{% endfor %}
+</tr>
+{% endfor %}
+
+</table>
+
+
+<table class="tabcontent">
+
+<tr>
+<th> Date Of Purchase </th>
+<th> Product</th>
+<th> NumberRecieved </th>
+<th> Supplier </th>
+</tr>
+
+{% for p in data2 %}
+<tr>
+{% if p|length == 3  %}
+     {% for x in p %}
+        <th> {{x}} </th>
+     {% endfor %}
+{% else %}
+     {% for x in p %}
+        <td><input type="text" size="10"  value='{{ x }}' > </td>
+     {% endfor %}
+{% endif %}
+</tr>
+{% endfor %}
+
+</table>
+
+
+<table class="tabcontent">
+
+<th> id </th>
+<th> Title </th>
+<th> First </th>
+<th> Middle </th>
+<th> Last </th>
+<th> ProductId </th>
+<th> NumberShipped </th>
+<th> OrderDate </th>
+
+
+{% for p in data3 %}
+<tr>
+{% for x in p %}
+<td><input type="text" size="10" value='{{ x }}' > </td>
+{% endfor %}
+</tr>
+{% endfor %}
+{% endblock %}
+
+</table>
+
+
+
+<script>
+
+var init;
+
+
+function display(evt,z)
+{
+var x=document.getElementsByClassName("tabcontent");
+for(var i=0;i<3;i++)
+  x[i].style.display="none";
+
+tablinks = document.getElementsByClassName("tablinks");
+for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+   }
+
+evt.currentTarget.className += " active";
+x[parseInt(z)].style.display="block";
+
+}
+
+function finaler()
+{
+var temp=document.getElementsByClassName("temp");
+
+for(var i=0;i<temp.length;i++)
+{
+  var x=document.getElementsByClassName("temp")[i];
+  var y=x.getElementsByTagName("td")[7];
+  var z=x.getElementsByTagName("td")[8];
+  var t1=y.getElementsByTagName("input")[0].value;
+  if(parseInt(t1)<0)
+   {
+    y.getElementsByTagName("input")[0].style.backgroundColor="pink";
+   }
+  var t2=z.getElementsByTagName("input")[0].value;
+  if(parseInt(t1)<=parseInt(t2))
+    { var xd=x.getElementsByTagName("td")[1];
+      x.getElementsByTagName("td")[1].style.backgroundColor="yellow";
+      xd.getElementsByTagName("input")[0].style.backgroundColor="yellow";
+    }
+}
+
+}
+
+function myf1(x,y)
+{
+  var t1=document.getElementsByClassName("temp")[x-1];
+  var t2=t1.getElementsByTagName("td")[y-1];
+  init=t2.getElementsByTagName("input")[0].value;
+
+
+}
+
+function myf(x1,y)
+{
+  var t1=document.getElementsByClassName("temp")[x1-1];
+  var val=[];
+  for(var i=0;i<9;i++)
+  {
+  var t2=t1.getElementsByTagName("td")[i];
+  var t3=t2.getElementsByTagName("input")[0].value;
+  val[i]=t3;
+  }
+  var clm;
+  switch(parseInt(y))
+  {
+   case 1: clm="id";break;
+   case 2: clm="ProductName";break;
+   case 3: clm="PartNumber";break;
+   case 4: clm="ProductLabel";break;
+   case 5: clm="StartingInventory";break;
+   case 6: clm="InventoryRecieved";break;
+   case 7: clm="InventoryShipped";break;
+   case 8: clm="InventoryOnHand";break;
+   case 9: clm="MinimumRequired";break;
+  }
+ alert('saved');
+var x=document.getElementsByName("csrfmiddlewaretoken")[0].value;
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+   // if (this.readyState == 4 && this.status == 200) {
+   //   document.getElementById("demo").innerHTML = this.responseText;
+  // }    
+  };
+xhttp.open("POST", "http://localhost:8000/get/", true);
+xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xhttp.send("csrfmiddlewaretoken="+x+"&v1="+val[0]+"&v2="+val[1]+"&v3="+val[2]+"&v4="+val[3]+"&v5="+val[4]+"&v6="+val[5]+"&v7="+val[6]+"&v8="+val[7]+"&v9="+val[8]);
+
+
+finaler();
+//location.reload();
+}
+
+
+</script>
+
+<p id="demo"> </p>
+
+<a href="http://localhost:8000/product_details/"><button>  (+) Add Product </button> </a>
+
+
+</body>
+
+
+</html>

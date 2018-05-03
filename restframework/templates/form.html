@@ -1,0 +1,79 @@
+<html>
+
+<head>
+
+</head>
+
+
+<body >
+
+<script>
+function myf()
+{
+alert("hello")
+}
+
+</script>
+
+
+<center><h1>TASK LIST </h1> <center>
+
+<center>
+<table border="1" id="mytable">
+<th>Process_name</th>
+<th>Process_id</th>
+<th>Process_state</th>
+{% block content %}
+{% for p in dic %}
+<tr>
+<td> {{p.name}} </td>
+<td> {{p.id}} </td>
+<td> {{p.due}} </td>
+<td><input type="button" value="info" onclick="myf()">  </td>
+</tr>
+{% endfor %}
+</table>
+
+<br>
+<br>
+<br>
+</center>
+<!--
+<table border="1" id="mytable">
+<th>Instance_name</th>
+<th>Instance_id</th>
+<th>Instance_state</th>
+{% for p in p1 %}
+<tr>
+<td> {{p.instance_name}} </td>
+<td> {{p.instance_id}} </td>
+<td> {{p.instance_state}} </td>
+</tr>
+{% endfor %}
+</table>
+
+<br>
+<br>
+<br>
+
+<table border="1" id="mytable">
+<th>Task_name</th>
+<th>Task_id</th>
+<th>Task_state</th>
+{% for p in p2 %}
+<tr>
+<td> {{p.task_name}} </td>
+<td> {{p.task_id}} </td>
+<td> {{p.task_state}} </td>
+</tr>
+{% endfor %}
+{% endblock %}
+
+
+</table>
+</center>
+
+-->
+</body>
+
+</html>
